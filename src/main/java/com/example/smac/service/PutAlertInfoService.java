@@ -11,7 +11,7 @@ import com.example.smac.domain.AlertLogEntity;
 import com.example.smac.domain.AlertLogRepository;
 
 @Service
-public class PostAlertInfoService {
+public class PutAlertInfoService {
     @Autowired
     AlertLogRepository alertLogRepository;
 

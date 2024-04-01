@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.smac.domain.AllAlertInfoEntity;
 import com.example.smac.service.GetAlertInfoService;
-import com.example.smac.service.PostAlertInfoService;
-import com.example.smac.service.PutAlertingInfoService;
+import com.example.smac.service.PutAlertInfoService;
+import com.example.smac.service.PostAlertingInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,10 +30,10 @@ public class SmacController {
     GetAlertInfoService getAlertInfoService;
 
     @Autowired
-    PostAlertInfoService postAlertInfoService;
+    PostAlertingInfoService postAlertingInfoService;
 
     @Autowired
-    PutAlertingInfoService putAlertingInfoService;
+    PutAlertInfoService putAlertInfoService;
 
     @CrossOrigin
     @GetMapping("/get")
@@ -42,41 +42,40 @@ public class SmacController {
     }
 
     @CrossOrigin
-    @PostMapping("/post/callOff")
+    @PutMapping("/put/callOff")
     public String postAlertingInfo(@RequestParam(value = "alertNo", defaultValue = "0") String alertNo,
     @RequestParam(value = "address", defaultValue = "0") String address) {
-        //TODO: process POST request
-        logger.info("post callOff!");
+        logger.info("put callOff!");
         
-        return postAlertInfoService.callOff(alertNo,address);
+        return putAlertInfoService.callOff(alertNo,address);
     }
 
     @CrossOrigin
-    @PostMapping("/post/done")
+    @PutMapping("/put/done")
     public String postOngoingInfo(@RequestParam(value = "alertNo", defaultValue = "0") String alertNo,
     @RequestParam(value = "address", defaultValue = "0") String address) {
         //TODO: process POST request
-        logger.info("post done");
+        logger.info("put done");
         
-        return postAlertInfoService.done(alertNo,address);
+        return putAlertInfoService.done(alertNo,address);
     }
 
     @CrossOrigin
-    @PostMapping("/post/doneAll")
+    @PutMapping("/put/doneAll")
     public String postOngoingInfo( @RequestParam(value = "address", defaultValue = "0") String address) {
         //TODO: process POST request
-        logger.info("post doneAll");
+        logger.info("put doneAll");
         
-        return postAlertInfoService.doneAll(address);
+        return putAlertInfoService.doneAll(address);
     }
 
     @CrossOrigin
-    @PutMapping("/put")
+    @PostMapping("/post")
     public String put( @RequestParam(value = "alertNo", defaultValue = "0") String alertNo) {
         //TODO: process POST request
-        logger.info("put");
+        logger.info("post");
         
-        return putAlertingInfoService.put(alertNo);
+        return postAlertingInfoService.post(alertNo);
     }
     
 

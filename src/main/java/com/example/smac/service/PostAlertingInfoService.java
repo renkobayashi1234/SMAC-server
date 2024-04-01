@@ -10,11 +10,11 @@ import com.example.smac.domain.AlertLogEntity;
 import com.example.smac.domain.AlertLogRepository;
 
 @Service
-public class PutAlertingInfoService {
+public class PostAlertingInfoService {
     @Autowired
     AlertLogRepository alertLogRepository;
 
-    public String put(String alertNo){
+    public String post(String alertNo){
         setZeroNewest();
 
         AlertLogEntity log = new AlertLogEntity();
