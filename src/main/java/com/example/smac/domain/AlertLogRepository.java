@@ -9,5 +9,6 @@ import java.util.List;
 public interface AlertLogRepository extends CrudRepository<AlertLogEntity,Integer>{
     List<AlertLogEntity> findByAlertNo(String alertNo);
     List<AlertLogEntity> findByStatus(int status);
+    List<AlertLogEntity> findByNewest(int newest);
     List<AlertLogEntity> findAll();
 }

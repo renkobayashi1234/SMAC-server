@@ -58,10 +58,10 @@ public class GetAlertInfoService {
 
     private List<AlertInfoEntity> getAlertingInfoList(){
         List<AlertInfoEntity> alertingInfoList = new ArrayList<>();
-        //解除待ち(status:1)のリストを発生日時(fireData)の昇順で返す。
+        //解除待ち(status:1)のリストを発生日時(fireData)の降順で返す。
         List<AlertLogEntity> logList=alertLogRepository.findByStatus(1)
                                                        .stream()
-                                                       .sorted(Comparator.comparing(AlertLogEntity::getFireDate))
+                                                       .sorted(Comparator.comparing(AlertLogEntity::getFireDate).reversed())
                                                        .toList();
         for(AlertLogEntity log : logList){
             alertingInfoList.add(AlertInfoEntity.makeFromLog(log));
@@ -72,10 +72,10 @@ public class GetAlertInfoService {
 
     private List<AlertInfoEntity> getOngoingInfoList(){
         List<AlertInfoEntity> ongoingInfoList = new ArrayList<>();
-        //完了待ち(status:2)のリストをは解除日時(calloffDate)の降順で返す。
+        //完了待ち(status:2)のリストをは解除日時(calloffDate)の昇順で返す。
         List<AlertLogEntity> logList=alertLogRepository.findByStatus(2)
                                                        .stream()
-                                                       .sorted(Comparator.comparing(AlertLogEntity::getCallOffDate).reversed())
+                                                       .sorted(Comparator.comparing(AlertLogEntity::getCallOffDate))
                                                        .toList();
         for(AlertLogEntity log : logList){
             ongoingInfoList.add(AlertInfoEntity.makeFromLog(log));

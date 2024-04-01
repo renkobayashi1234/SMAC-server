@@ -1,6 +1,8 @@
 package com.example.smac.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ public class PutAlertingInfoService {
     AlertLogRepository alertLogRepository;
 
     public String put(String alertNo){
+        setZeroNewest();
+
         AlertLogEntity log = new AlertLogEntity();
         log.setAlertNo(alertNo);
         log.setFireDate(LocalDateTime.now());
@@ -26,5 +30,13 @@ public class PutAlertingInfoService {
             e.printStackTrace();
             return "0";
         }
+    }
+
+    public void setZeroNewest(){
+        List<AlertLogEntity> newestList = alertLogRepository.findByNewest(1);
+        for(AlertLogEntity newest:newestList){
+            newest.setNewest(0);
+        }
+        alertLogRepository.saveAll(newestList);
     }
 }
