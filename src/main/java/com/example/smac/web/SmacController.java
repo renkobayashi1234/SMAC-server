@@ -1,7 +1,6 @@
 package com.example.smac.web;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.smac.domain.AllAlertInfoEntity;
 import com.example.smac.service.GetAlertInfoService;
 import com.example.smac.service.PutAlertInfoService;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 
 
@@ -78,5 +78,5 @@ public class SmacController {
         return postAlertingInfoService.post(alertNo);
     }
     
-
+    
 }

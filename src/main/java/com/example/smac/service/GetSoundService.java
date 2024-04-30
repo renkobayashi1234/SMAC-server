@@ -21,6 +21,7 @@ public class GetSoundService {
         if(!soundFlag){
             return new SoundInfoEntity(false, "");
         }else{
+            //先頭のalert No (発生日時が最新のもの)を返す
             int soundAlertNo=alertingInfoList.get(0).getAlertNo();
             String soundUrl = getSoundUrl(soundAlertNo);
 
