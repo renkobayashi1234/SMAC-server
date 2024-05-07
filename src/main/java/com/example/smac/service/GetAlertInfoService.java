@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.smac.domain.AlertInfoEntity;
@@ -24,10 +25,10 @@ public class GetAlertInfoService {
     @Autowired
     GetSoundService getSoundService;
 
-    public AllAlertInfoEntity getAlertInfo(){
+    @Value("${data.maxRecord}")
+    private int maxRecord;
 
-        //未通知のものを通知済みにする
-        notifyLog();
+    public AllAlertInfoEntity getAlertInfo(){
 
         //データ取得
         List<AlertInfoEntity> alertingInfoList = getAlertingInfoList();
@@ -45,25 +46,20 @@ public class GetAlertInfoService {
             soundInfo);
     }
 
-    private void notifyLog(){
-        List<AlertLogEntity> notifiedLogList = new ArrayList<>();
-        //未通知(status:0)のログを解除待ち(status:1)にする
-        for(AlertLogEntity log : alertLogRepository.findByStatus(0)){
-            log.setStatus(1);
-            log.setNotifyDate(LocalDateTime.now());
-            notifiedLogList.add(log);
-        }
-        alertLogRepository.saveAll(notifiedLogList);
-    }
-
     private List<AlertInfoEntity> getAlertingInfoList(){
         List<AlertInfoEntity> alertingInfoList = new ArrayList<>();
         //解除待ち(status:1)のリストを発生日時(fireData)の降順で返す。
-        List<AlertLogEntity> logList=alertLogRepository.findByStatus(1)
+        List<AlertLogEntity> logList=alertLogRepository.findByAlerting(maxRecord)
                                                        .stream()
                                                        .sorted(Comparator.comparing(AlertLogEntity::getFireDate).reversed())
                                                        .toList();
         for(AlertLogEntity log : logList){
+            //未通知(status:0)のログを解除待ち(status:1)にする
+            if(log.getStatus()==0){
+                log.setStatus(1);
+                log.setNotifyDate(LocalDateTime.now());
+                alertLogRepository.save(log);
+            }
             alertingInfoList.add(AlertInfoEntity.makeFromLog(log));
         }
 
@@ -73,7 +69,7 @@ public class GetAlertInfoService {
     private List<AlertInfoEntity> getOngoingInfoList(){
         List<AlertInfoEntity> ongoingInfoList = new ArrayList<>();
         //完了待ち(status:2)のリストをは解除日時(calloffDate)の昇順で返す。
-        List<AlertLogEntity> logList=alertLogRepository.findByStatus(2)
+        List<AlertLogEntity> logList=alertLogRepository.findByOngoing(maxRecord)
                                                        .stream()
                                                        .sorted(Comparator.comparing(AlertLogEntity::getCallOffDate))
                                                        .toList();

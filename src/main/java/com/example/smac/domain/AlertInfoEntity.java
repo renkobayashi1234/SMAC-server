@@ -47,7 +47,6 @@ public class AlertInfoEntity {
 
     public static AlertInfoEntity makeFromLog(AlertLogEntity log){
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        logger.info(log.getFireDate().format(formatter));
         return new AlertInfoEntity(
             log.getId(), 
             Integer.parseInt(log.getAlertNo()), 
